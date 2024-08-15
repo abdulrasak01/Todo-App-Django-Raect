@@ -1,8 +1,14 @@
 import React from "react";
 
-const Content = ({ items, handleDelete, handleCheck, setUpdateData,updateData }) => {
+const Content = ({
+  items,
+  handleDelete,
+  handleCheck,
+  setUpdateData,
+  updateData,
+}) => {
   return (
-    <main className=" my-40 text-center">
+    <main className=" my-20 text-center">
       {items.length ? (
         <ul className="w-9/12 mx-auto">
           {items.map((item, index) => (
@@ -13,6 +19,7 @@ const Content = ({ items, handleDelete, handleCheck, setUpdateData,updateData })
               <input
                 name="checkbox"
                 type="checkbox"
+                checked = {item.checked}
                 value={item.checked}
                 onChange={() => handleCheck(item.id)}
               />
@@ -45,7 +52,7 @@ const Content = ({ items, handleDelete, handleCheck, setUpdateData,updateData })
                     </svg>
                   </span>
                 </button>
-                
+
                 <button className="ml-5" onClick={() => handleDelete(item.id)}>
                   <span>
                     <svg

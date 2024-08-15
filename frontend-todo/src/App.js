@@ -8,23 +8,25 @@ import EditItem from "./EditItem";
 // JSON.parse(localStorage.getItem("TodoList"))
 function App() {
   let [items, setItems] = useState([]);
+  const [currentDate, setCurrentDate] = useState(getDate());
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/todos/");
+      setItems(response.data);
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.header);
+      } else {
+        console.log(err.message);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/todos/");
-        setItems(response.data);
-      } catch (err) {
-        if (err.response) {
-          console.log(err.response.data);
-          console.log(err.response.header);
-        } else {
-          console.log(err.message);
-        }
-      }
-    };
     fetchItems();
-  }, [items]);
+  }, []);
   const [search, setSearch] = useState("");
   const [newItem, setNewItem] = useState("");
   const [updateData, setUpdateData] = useState("");
@@ -36,6 +38,7 @@ function App() {
         checked: false,
       });
       setItems(response.data);
+      fetchItems();
     } catch (err) {
       if (err.response) {
         console.log(err.response.data);
@@ -45,6 +48,14 @@ function App() {
       }
     }
   };
+
+  function getDate() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const date = today.getDate();
+    return `${month}/${date}/${year}`;
+  }
 
   const handleDelete = async (id) => {
     try {
@@ -89,64 +100,62 @@ function App() {
       )
     : items;
 
-    const updateTask = async (e) => {
-      e.preventDefault();
-      try {
-        const response = await axios.put(
-          `http://127.0.0.1:8000/detail/${updateData.id}`,
-          updateData
-        );
-  
-        setItems(
-          items.map((item) =>
-            item.id === updateData.id ? { ...response.data } : item
-          )
-        );
-      } catch (err) {
-        console.log(`err${err.message}`);
-      }
-      setUpdateData("");
-    };
+  const updateTask = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/detail/${updateData.id}`,
+        updateData
+      );
 
-    const cancelUpdate = (e) => {
-      e.preventDefault();
-      setUpdateData("");
+      setItems(
+        items.map((item) =>
+          item.id === updateData.id ? { ...response.data } : item
+        )
+      );
+    } catch (err) {
+      console.log(`err${err.message}`);
     }
+    setUpdateData("");
+  };
 
-    const changeTask = (e) => {
-      e.preventDefault();
-      let newEntry = {
-        id: updateData.id,
-        item: e.target.value,
-        checked: updateData.checked,
-      };
-      setUpdateData(newEntry);
+  const cancelUpdate = (e) => {
+    e.preventDefault();
+    setUpdateData("");
+  };
+
+  const changeTask = (e) => {
+    e.preventDefault();
+    let newEntry = {
+      id: updateData.id,
+      item: e.target.value,
+      checked: updateData.checked,
     };
-  
+    setUpdateData(newEntry);
+  };
+
 
   return (
-    <div>
-      <Header />
+    <div className="flex flex-col justify-between">
+      <Header search={search} setSearch={setSearch} />
       <AddItem
         handleSubmit={handleSubmit}
         setNewItem={setNewItem}
         newItem={newItem}
-        search={search}
-        setSearch={setSearch}
+        currentDate={currentDate}
       />
-      <EditItem
-        cancelUpdate={cancelUpdate}
-        changeTask={changeTask}
-        updateTask={updateTask}
-        newItem={newItem}
-        items={items}
-        updateData={updateData}
-        setUpdateData={setUpdateData}
-      />
+        <EditItem
+          cancelUpdate={cancelUpdate}
+          changeTask={changeTask}
+          updateTask={updateTask}
+          newItem={newItem}
+          items={items}
+          updateData={updateData}
+          setUpdateData={setUpdateData}
+        />
 
       <Content
         items={items}
-        // items = {items}
         handleDelete={handleDelete}
         handleCheck={handleCheck}
         setUpdateData={setUpdateData}

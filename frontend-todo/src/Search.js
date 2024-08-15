@@ -1,19 +1,18 @@
-import React from 'react'
+import React from "react";
 
-const Search = ({search,setSearch}) => {
+const Search = ({ search, setSearch }) => {
   return (
-    <div className='m-5'>
-        <form action="" onSubmit={(e)=>{e.preventDefault()}}>
-        <input type="text"
-               id='search'
-               placeholder='Search Items'
-               className='border border-gray-300 rounded-full p-5'
-               value={search}
-               onChange={(e)=>setSearch(e.target.value)}
-        />
-</form>
+    <div class="relative z-0 m-5 mr-5 bg-white p-2 border rounded-2xl px-2">
+      <input
+        type="text"
+        className="block py-2 px-0 w-full text-sm text-black  bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        id="search"
+        placeholder="Search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
