@@ -4,6 +4,7 @@ import Content from "./Content";
 import Footer from "./Footer";
 import AddItem from "./AddItem";
 import axios from "axios";
+import EditItem from "./EditItem";
 // JSON.parse(localStorage.getItem("TodoList"))
 function App() {
   let [items, setItems] = useState([]);
@@ -26,6 +27,7 @@ function App() {
   }, [items]);
   const [search, setSearch] = useState("");
   const [newItem, setNewItem] = useState("");
+  const [updateData, setUpdateData] = useState("");
 
   const addItem = async (item) => {
     try {
@@ -87,6 +89,41 @@ function App() {
       )
     : items;
 
+    const updateTask = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await axios.put(
+          `http://127.0.0.1:8000/detail/${updateData.id}`,
+          updateData
+        );
+  
+        setItems(
+          items.map((item) =>
+            item.id === updateData.id ? { ...response.data } : item
+          )
+        );
+      } catch (err) {
+        console.log(`err${err.message}`);
+      }
+      setUpdateData("");
+    };
+
+    const cancelUpdate = (e) => {
+      e.preventDefault();
+      setUpdateData("");
+    }
+
+    const changeTask = (e) => {
+      e.preventDefault();
+      let newEntry = {
+        id: updateData.id,
+        item: e.target.value,
+        checked: updateData.checked,
+      };
+      setUpdateData(newEntry);
+    };
+  
+
   return (
     <div>
       <Header />
@@ -97,12 +134,23 @@ function App() {
         search={search}
         setSearch={setSearch}
       />
+      <EditItem
+        cancelUpdate={cancelUpdate}
+        changeTask={changeTask}
+        updateTask={updateTask}
+        newItem={newItem}
+        items={items}
+        updateData={updateData}
+        setUpdateData={setUpdateData}
+      />
 
       <Content
         items={items}
         // items = {items}
         handleDelete={handleDelete}
         handleCheck={handleCheck}
+        setUpdateData={setUpdateData}
+        updateData={updateData}
       />
       <Footer length={items.length} />
     </div>
