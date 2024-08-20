@@ -11,7 +11,7 @@ const AddItem = ({
   return (
     <div className="w-full mx-auto mt-20 absolute flex justify-between">
       <div className="mt-5 left-0">
-        <span className="ml-10 p-4 font-bold text-gray-black bg-red-500 rounded-2xl ">
+        <span className="ml-10 bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
         Date: {currentDate}
         </span>
       </div>

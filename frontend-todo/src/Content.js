@@ -13,7 +13,7 @@ const Content = ({
         <ul className="w-9/12 mx-auto">
           {items.map((item, index) => (
             <li
-              className="flex justify-between bg-gray-300 m-3 p-3"
+              className="flex justify-between bg-gray-300 m-3 p-3 font-serif hover:bg-gray-400"
               key={index}
             >
               <input

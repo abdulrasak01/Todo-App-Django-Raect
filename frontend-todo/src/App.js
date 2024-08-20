@@ -153,7 +153,6 @@ function App() {
           updateData={updateData}
           setUpdateData={setUpdateData}
         />
-
       <Content
         items={items}
         handleDelete={handleDelete}

@@ -20,7 +20,6 @@ const EditItem = ({
         <div className="flex ">
           <div className="">
             <input
-               autoFocus
               ref={inputRef}
               type="text"
               id="updateItem"
